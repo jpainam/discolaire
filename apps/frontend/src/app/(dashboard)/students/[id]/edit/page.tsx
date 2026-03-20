@@ -1,6 +1,6 @@
 import { NoPermission } from "~/components/no-permission";
 import { checkPermission } from "~/permissions/server";
-import { caller, HydrateClient } from "~/trpc/server";
+import { batchPrefetch, caller, HydrateClient, trpc } from "~/trpc/server";
 import { getFullName } from "~/utils";
 import { CreateEditStudent } from "../../create/CreateEditStudent";
 import { StudentFormProvider } from "../../create/StudentFormContext";
@@ -11,6 +11,11 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
   if (!canEditStudent) {
     return <NoPermission />;
   }
+
+  batchPrefetch([
+    trpc.classroom.all.queryOptions(),
+    trpc.contactRelationship.all.queryOptions(),
+  ]);
 
   const student = await caller.student.get(params.id);
 

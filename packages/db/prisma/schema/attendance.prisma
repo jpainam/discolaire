@@ -33,4 +33,6 @@ model Attendance {
     createdById      String?
     createdBy        User?          @relation("attendanceCreatedBy", fields: [createdById], references: [id], onUpdate: Cascade)
     notificationSent Boolean        @default(false)
+
+    @@index([studentId, termId])
 }

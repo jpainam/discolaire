@@ -12,7 +12,7 @@ import { ErrorFallback } from "~/components/error-fallback";
 import { Separator } from "~/components/ui/separator";
 import { Skeleton } from "~/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
-import { getQueryClient, HydrateClient, trpc } from "~/trpc/server";
+import { batchPrefetch, getQueryClient, HydrateClient, trpc } from "~/trpc/server";
 import { SubjectJournalEditor } from "./sessions/SubjectJournalEditor";
 import { SubjectJournalHeader } from "./sessions/SubjectJournalHeader";
 import { SubjectJournalList } from "./sessions/SubjectJournalList";
@@ -54,6 +54,15 @@ export default async function Page(props: PageProps) {
       />
     );
   }
+
+  batchPrefetch([
+    trpc.subject.get.queryOptions(subjectId),
+    trpc.subjectJournal.subject.queryOptions({
+      subjectId,
+      pageIndex: 0,
+      pageSize: 10,
+    }),
+  ]);
 
   return (
     <Tabs defaultValue="teaching_session">

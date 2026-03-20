@@ -41,41 +41,50 @@ export const enrollmentRouter = {
     .input(z.object({ classroomId: z.string().min(1) }))
     .query(async ({ ctx, input }) => {
       // TODO Use this to replace classroom.student in classroom/[id]/enrollment
-      const enrollments = await ctx.db.enrollment.findMany({
-        where: {
-          classroomId: input.classroomId,
-        },
-        include: {
-          student: {
-            include: {
-              formerSchool: true,
-              religion: true,
+      const [targetClassroom, enrollments] = await Promise.all([
+        ctx.db.classroom.findUniqueOrThrow({
+          where: { id: input.classroomId },
+          select: { levelId: true },
+        }),
+        ctx.db.enrollment.findMany({
+          where: { classroomId: input.classroomId },
+          include: {
+            student: {
+              include: {
+                formerSchool: true,
+                religion: true,
+              },
             },
           },
-        },
-      });
-      const enrollmentWithRepeating = await Promise.all(
-        enrollments.map(async (enrollment) => {
-          const isRep = await ctx.services.student.isRepeating(
-            enrollment.student.id,
-            ctx.schoolYearId,
-          );
-          return {
-            ...enrollment,
-            student: {
-              ...enrollment.student,
-              isRepeating: isRep,
-            },
-          };
         }),
-      );
-      return enrollmentWithRepeating;
+      ]);
+
+      // Batch: find students who have ANY prior enrollment at the same level
+      const studentIds = enrollments.map((e) => e.studentId);
+      const priorAtSameLevel = await ctx.db.enrollment.findMany({
+        where: {
+          studentId: { in: studentIds },
+          schoolYearId: { not: ctx.schoolYearId },
+          classroom: { levelId: targetClassroom.levelId },
+        },
+        select: { studentId: true },
+      });
+      const repeatingSet = new Set(priorAtSameLevel.map((e) => e.studentId));
+
+      return enrollments.map((enrollment) => ({
+        ...enrollment,
+        student: {
+          ...enrollment.student,
+          isRepeating: repeatingSet.has(enrollment.studentId),
+        },
+      }));
     }),
   enrolled: protectedProcedure
     .input(z.object({ schoolYearId: z.string().optional() }))
     .query(async ({ ctx, input }) => {
+      const schoolYearId = input.schoolYearId ?? ctx.schoolYearId;
       const schoolYear = await ctx.db.schoolYear.findUniqueOrThrow({
-        where: { id: input.schoolYearId ?? ctx.schoolYearId },
+        where: { id: schoolYearId },
       });
 
       const data = await ctx.db.student.findMany({
@@ -91,32 +100,36 @@ export const enrollmentRouter = {
                 },
               },
             },
+            include: {
+              classroom: true,
+            },
           },
         },
         where: {
           enrollments: {
-            some: {
-              schoolYearId: input.schoolYearId ?? ctx.schoolYearId,
-            },
+            some: { schoolYearId },
           },
         },
       });
-      const students = await Promise.all(
-        data.map(async (student) => {
-          return {
-            ...student,
-            isRepeating: await ctx.services.student.isRepeating(
-              student.id,
-              ctx.schoolYearId,
-            ),
-            classroom: await ctx.services.student.getClassroom(
-              student.id,
-              ctx.schoolYearId,
-            ),
-          };
-        }),
-      );
-      return students;
+
+      return data.map((student) => {
+        const currentEnrollment = student.enrollments.find(
+          (e) => e.schoolYearId === schoolYearId,
+        );
+        const priorEnrollments = student.enrollments.filter(
+          (e) => e.schoolYearId !== schoolYearId,
+        );
+        const isRepeating = currentEnrollment
+          ? priorEnrollments.some(
+              (e) => e.classroom.levelId === currentEnrollment.classroom.levelId,
+            )
+          : false;
+        return {
+          ...student,
+          isRepeating,
+          classroom: currentEnrollment?.classroom ?? null,
+        };
+      });
     }),
   create: protectedProcedure
     .input(

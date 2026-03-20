@@ -301,3 +301,5 @@ cd packages/db && pn with-env prisma migrate deploy`
 You: pnpm db:migrate --name <describe_the_change>
 End user: pnpm db:deploy
 ```
+
+paul@~/Downloads$ ./minio server --console-address :9001 ./data --address ":9310"

@@ -153,6 +153,7 @@ model Enrollment {
     createdBy    User?      @relation("EnrollmentCreatedBy", fields: [createdById], references: [id], onDelete: SetNull, onUpdate: Cascade)
 
     @@unique([schoolYearId, classroomId, studentId])
+    @@index([studentId, schoolYearId])
 }
 
 model ClassroomLevel {

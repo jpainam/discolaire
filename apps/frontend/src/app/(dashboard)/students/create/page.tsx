@@ -5,7 +5,7 @@ import { ErrorFallback } from "~/components/error-fallback";
 import { NoPermission } from "~/components/no-permission";
 import { Skeleton } from "~/components/ui/skeleton";
 import { checkPermission } from "~/permissions/server";
-import { HydrateClient } from "~/trpc/server";
+import { batchPrefetch, HydrateClient, trpc } from "~/trpc/server";
 import { CreateEditStudent } from "./CreateEditStudent";
 import { StudentFormProvider } from "./StudentFormContext";
 
@@ -14,6 +14,12 @@ export default async function Page() {
   if (!canCreateStudent) {
     return <NoPermission />;
   }
+
+  batchPrefetch([
+    trpc.classroom.all.queryOptions(),
+    trpc.contactRelationship.all.queryOptions(),
+  ]);
+
   return (
     <HydrateClient>
       <ErrorBoundary errorComponent={ErrorFallback}>

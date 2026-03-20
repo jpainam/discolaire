@@ -1,6 +1,5 @@
 import type { PrismaClient } from "@repo/db";
 import { TransactionStatus } from "@repo/db/enums";
-import redisClient from "@repo/kv";
 
 import { getFullName } from "../utils";
 import { BillingService } from "./billing-service";
@@ -458,12 +457,6 @@ export class StudentService {
     return { name: getFullName(student), balance: balance };
   }
   async isRepeating(studentId: string, schoolYearId: string) {
-    const key = `student:${studentId}:schoolYear:${schoolYearId}:isRepeating`;
-    // TODO, when i edit student, i need to delete this key as well
-    const _rep = await redisClient.get(key);
-    // if (rep !== null) {
-    //   return rep === "true";
-    // }
     const enrollments = await this.db.enrollment.findMany({
       where: {
         studentId: studentId,
@@ -480,19 +473,16 @@ export class StudentService {
       (enr) => enr.classroom.schoolYearId === schoolYearId,
     );
     if (enrollments.length <= 1) {
-      const r = curEnrollement?.student.isRepeating;
-      void redisClient.set(key, r ? "true" : "false");
-      return r;
+      return curEnrollement?.student.isRepeating;
     }
 
     const prevEnrollments = enrollments.filter(
       (enr) => enr.classroom.schoolYearId !== schoolYearId,
     );
-    const isRepeating =
+    return (
       prevEnrollments.filter(
         (prev) => prev.classroom.levelId === curEnrollement?.classroom.levelId,
-      ).length > 0;
-    void redisClient.set(key, isRepeating ? "true" : "false");
-    return isRepeating;
+      ).length > 0
+    );
   }
 }
