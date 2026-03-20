@@ -6,7 +6,7 @@ import { parseAsInteger, parseAsString, useQueryState } from "nuqs";
 
 import type { RouterOutputs } from "@repo/api";
 
-import FlatBadge from "~/components/FlatBadge";
+import { Badge } from "~/components/base-badge";
 import {
   Accordion,
   AccordionContent,
@@ -14,6 +14,16 @@ import {
   AccordionTrigger,
 } from "~/components/ui/accordion";
 import { Separator } from "~/components/ui/separator";
+
+type Grade = RouterOutputs["student"]["grades"][number];
+type Subject = Grade["gradeSheet"]["subject"];
+
+interface SubjectEntry {
+  subject: Subject;
+  grades: Grade[];
+  weightedSum: number;
+  totalWeight: number;
+}
 
 export function BySubject({
   grades,
@@ -26,121 +36,115 @@ export function BySubject({
 
   const locale = useLocale();
 
-  const { subjects, subjectSums, filteredGrades } = useMemo(() => {
-    let filteredGrades = grades;
-    if (termId) {
-      filteredGrades = filteredGrades.filter(
-        (g) => g.gradeSheet.termId === termId,
-      );
-    }
-    const subjects = Array.from(
-      new Set(
-        filteredGrades
-          .filter((g) => !g.isAbsent)
-          .map((grade) => grade.gradeSheet.subject),
-      ),
-    );
+  const subjectEntries = useMemo(() => {
+    const filtered = termId
+      ? grades.filter((g) => g.gradeSheet.termId === termId)
+      : grades;
 
-    const subjectSums: Record<string, number> = {};
-    filteredGrades.forEach((grade) => {
-      const subjectId = grade.gradeSheet.subject.id;
-      if (subjectId) {
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        subjectSums[subjectId] ??= 0;
-        subjectSums[subjectId] += grade.grade * Number(grade.gradeSheet.weight);
+    const map = new Map<number, SubjectEntry>();
+
+    for (const grade of filtered) {
+      const { subject } = grade.gradeSheet;
+      if (!map.has(subject.id)) {
+        map.set(subject.id, {
+          subject,
+          grades: [],
+          weightedSum: 0,
+          totalWeight: 0,
+        });
       }
-    });
-    return { subjectSums, subjects, filteredGrades };
+      if (!grade.isAbsent) {
+        const entry = map.get(subject.id);
+        if (!entry) continue;
+        const weight = Number(grade.gradeSheet.weight);
+        entry.grades.push(grade);
+        entry.weightedSum += grade.grade * weight;
+        entry.totalWeight += weight;
+      }
+    }
+
+    return Array.from(map.values()).filter((e) => e.grades.length > 0);
   }, [grades, termId]);
 
-  const uniqueSubjectTitles: number[] = [];
-
   return (
-    <Accordion type="single" collapsible className="w-full">
-      {subjects.map((subject, index) => {
-        if (uniqueSubjectTitles.includes(subject.id)) return null;
-        uniqueSubjectTitles.push(subject.id);
-        const subGrades = filteredGrades.filter(
-          (grade) => grade.gradeSheet.subject.id === subject.id,
-        );
-
-        const subjectAvg =
-          (subjectSums[subject.id] ?? 0) / (filteredGrades.length || 1e9);
-        return (
-          <AccordionItem
-            // className="[&>h3]:before:w-2 [&>h3]:before:h-full [&>h3]:before:bg-red-500"
-            style={{
-              borderLeftColor: subject.course.color,
-            }}
-            className="border-l-8 px-2"
-            key={`${subject.id}-${index}`}
-            value={`item-${subject.id}`}
-          >
-            <AccordionTrigger className="text-md flex flex-row font-bold">
-              <span>{subject.course.name}</span>
-              <FlatBadge
-                className="mr-4 ml-auto w-[50px]"
-                variant={
-                  subjectAvg < 10
-                    ? "red"
-                    : subjectAvg <= 12.5 && subjectAvg <= 18
-                      ? "blue"
-                      : "green"
-                }
-              >
-                {Number(subjectAvg).toFixed(2)}
-              </FlatBadge>
-            </AccordionTrigger>
-            <AccordionContent className="px-4">
-              {subGrades.map((grade, index) => {
-                const m = grade.gradeSheet.createdAt.toLocaleDateString(
-                  locale,
-                  {
-                    month: "short",
-                  },
-                );
-                const d = grade.gradeSheet.createdAt.toLocaleDateString(
-                  locale,
-                  {
-                    day: "numeric",
-                  },
-                );
-                return (
-                  <div
-                    className="mb-1 flex flex-col"
-                    key={`${grade.id}-${index}-bysubject`}
-                  >
-                    <div
-                      className="flex cursor-pointer flex-row gap-2"
-                      onClick={() => {
-                        void setGradeId(grade.id);
-                        void setGradeSheetId(grade.gradeSheetId);
-                      }}
-                    >
-                      <div className="bg-secondary mb-1 flex flex-col items-center rounded-md px-1 text-xs">
-                        <div>{d}</div>
-                        <div>{m}</div>
-                      </div>
-                      <div className="flex flex-col">
-                        <div className="text-sm font-semibold">
-                          {grade.gradeSheet.name}
+    <Accordion
+      type="single"
+      collapsible
+      className="w-full rounded-none border-none"
+    >
+      {subjectEntries.map(
+        ({ subject, grades: subGrades, weightedSum, totalWeight }) => {
+          const subjectAvg = totalWeight > 0 ? weightedSum / totalWeight : 0;
+          return (
+            <AccordionItem
+              style={{ borderLeftColor: subject.course.color }}
+              className="border-l-8 px-2"
+              key={subject.id}
+              value={`item-${subject.id}`}
+            >
+              <AccordionTrigger className="hover:bg-muted/30 items-center gap-3 hover:no-underline">
+                <span className="w-1/2">{subject.course.name}</span>
+                <Badge
+                  appearance={"light"}
+                  variant={
+                    subjectAvg < 10
+                      ? "destructive"
+                      : subjectAvg <= 12.5
+                        ? "info"
+                        : "success"
+                  }
+                >
+                  {subjectAvg.toFixed(2)}
+                </Badge>
+              </AccordionTrigger>
+              <AccordionContent className="px-4">
+                {subGrades.map((grade, index) => {
+                  const m = grade.gradeSheet.createdAt.toLocaleDateString(
+                    locale,
+                    {
+                      month: "short",
+                    },
+                  );
+                  const d = grade.gradeSheet.createdAt.toLocaleDateString(
+                    locale,
+                    {
+                      day: "numeric",
+                    },
+                  );
+                  return (
+                    <div className="mb-1 flex flex-col" key={grade.id}>
+                      <div
+                        className="flex cursor-pointer flex-row gap-2"
+                        onClick={() => {
+                          void setGradeId(grade.id);
+                          void setGradeSheetId(grade.gradeSheetId);
+                        }}
+                      >
+                        <div className="bg-primary text-primary-foreground mb-1 flex w-[45px] flex-col items-center rounded-md px-1 text-xs">
+                          <div>{d}</div>
+                          <div>{m}</div>
                         </div>
-                        <div className="text-muted-foreground tracking-tighter">
-                          {grade.gradeSheet.term.name}
+                        <div className="flex flex-col">
+                          <div className="text-sm font-semibold">
+                            {grade.gradeSheet.name}
+                          </div>
+                          <div className="text-muted-foreground tracking-tighter">
+                            {grade.gradeSheet.term.name}
+                          </div>
+                        </div>
+                        <div className="ml-auto font-bold">
+                          {grade.grade.toFixed(2)}
                         </div>
                       </div>
-                      <div className="ml-auto font-bold">
-                        {grade.grade.toFixed(2)}
-                      </div>
+                      {index < subGrades.length - 1 && <Separator />}
                     </div>
-                    {index < subGrades.length - 1 && <Separator />}
-                  </div>
-                );
-              })}
-            </AccordionContent>
-          </AccordionItem>
-        );
-      })}
+                  );
+                })}
+              </AccordionContent>
+            </AccordionItem>
+          );
+        },
+      )}
     </Accordion>
   );
 }
