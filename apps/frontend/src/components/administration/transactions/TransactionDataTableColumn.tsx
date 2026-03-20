@@ -156,20 +156,20 @@ export const useTransactionColumns = (): ColumnDef<
             const type = row.original.transactionType;
             if (type === TransactionType.DISCOUNT) {
               return (
-                <Badge appearance="light" variant="info">
+                <Badge appearance="light" variant="info" size={'xs'}>
                   {t("discount")}
                 </Badge>
               );
             }
             if (type === TransactionType.DEBIT) {
               return (
-                <Badge appearance="light" variant="destructive">
+                <Badge appearance="light" variant="destructive" size={'xs'}>
                   {t("debit")}
                 </Badge>
               );
             }
             return (
-              <Badge appearance="light" variant="success">
+              <Badge appearance="light" variant="success" size={'xs'}>
                 {t("credit")}
               </Badge>
             );

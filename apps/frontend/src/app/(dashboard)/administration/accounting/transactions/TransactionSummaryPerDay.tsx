@@ -3,6 +3,7 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useLocale, useTranslations } from "next-intl";
 
+import { Badge } from "~/components/base-badge";
 import {
   Table,
   TableBody,
@@ -48,25 +49,43 @@ export function TransactionSummaryPerDay() {
                     })}
                   </TableCell>
                   <TableCell>
-                    {s.pending.toLocaleString(locale, {
-                      currency: CURRENCY,
-                      maximumFractionDigits: 0,
-                      minimumFractionDigits: 0,
-                    })}
+                    <Badge
+                      variant={s.pending > 0 ? "warning" : "secondary"}
+                      size={"xs"}
+                      appearance={"light"}
+                    >
+                      {s.pending.toLocaleString(locale, {
+                        currency: CURRENCY,
+                        maximumFractionDigits: 0,
+                        minimumFractionDigits: 0,
+                      })}
+                    </Badge>
                   </TableCell>
                   <TableCell>
-                    {s.validated.toLocaleString(locale, {
-                      currency: CURRENCY,
-                      maximumFractionDigits: 0,
-                      minimumFractionDigits: 0,
-                    })}
+                    <Badge
+                      appearance={"light"}
+                      size={"xs"}
+                      variant={s.validated > 0 ? "success" : "secondary"}
+                    >
+                      {s.validated.toLocaleString(locale, {
+                        currency: CURRENCY,
+                        maximumFractionDigits: 0,
+                        minimumFractionDigits: 0,
+                      })}
+                    </Badge>
                   </TableCell>
                   <TableCell>
-                    {s.deleted.toLocaleString(locale, {
-                      currency: CURRENCY,
-                      maximumFractionDigits: 0,
-                      minimumFractionDigits: 0,
-                    })}
+                    <Badge
+                      variant={s.deleted > 0 ? "destructive" : "secondary"}
+                      size={"xs"}
+                      appearance={"light"}
+                    >
+                      {s.deleted.toLocaleString(locale, {
+                        currency: CURRENCY,
+                        maximumFractionDigits: 0,
+                        minimumFractionDigits: 0,
+                      })}
+                    </Badge>
                   </TableCell>
                 </TableRow>
               );
