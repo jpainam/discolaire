@@ -314,6 +314,8 @@ psql --dbname "Database_url"
 DROP SCHEMA IF EXISTS demo CASCADE;
 CREATE SCHEMA demo;
  # import into demo
+ use your local db, to import the new_demo, it will import as public, so make sure there is no public already in the selected DB.
+ rename the imported into demo, then only export that demo
  pg_restore  --dbname="Database_URL" --schema=demo  --no-owner --no-privileges new_demo.dump
 
- ```
+```
