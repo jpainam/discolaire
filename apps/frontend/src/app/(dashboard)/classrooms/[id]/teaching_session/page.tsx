@@ -12,7 +12,12 @@ import { ErrorFallback } from "~/components/error-fallback";
 import { Separator } from "~/components/ui/separator";
 import { Skeleton } from "~/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
-import { batchPrefetch, getQueryClient, HydrateClient, trpc } from "~/trpc/server";
+import {
+  batchPrefetch,
+  getQueryClient,
+  HydrateClient,
+  trpc,
+} from "~/trpc/server";
 import { SubjectJournalEditor } from "./sessions/SubjectJournalEditor";
 import { SubjectJournalHeader } from "./sessions/SubjectJournalHeader";
 import { SubjectJournalList } from "./sessions/SubjectJournalList";

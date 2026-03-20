@@ -121,7 +121,8 @@ export const enrollmentRouter = {
         );
         const isRepeating = currentEnrollment
           ? priorEnrollments.some(
-              (e) => e.classroom.levelId === currentEnrollment.classroom.levelId,
+              (e) =>
+                e.classroom.levelId === currentEnrollment.classroom.levelId,
             )
           : false;
         return {
